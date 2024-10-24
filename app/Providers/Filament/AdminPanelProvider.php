@@ -28,10 +28,11 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('SIPAWAI')
-            ->brandLogo(asset('assets/icons/icon-sipawai.svg'))
-            ->favicon(asset('assets/icons/favicon.svg'))
-            ->brandLogoHeight(fn() => auth()->check() ? '3rem' : '8rem')
+            ->profile()
+            ->brandName('Project Cuti')
+            // ->brandLogo(asset('assets/icons/icon-sipawai.svg'))
+            // ->favicon(asset('assets/icons/favicon.svg'))
+            // ->brandLogoHeight(fn() => auth()->check() ? '3rem' : '8rem')
             ->colors([
                 'primary' => Color::Amber,
             ])

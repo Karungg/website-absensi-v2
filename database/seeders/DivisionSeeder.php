@@ -14,11 +14,15 @@ class DivisionSeeder extends Seeder
     public function run(): void
     {
         $divisions = [
-            ['title' => 'Operasional'],
-            ['title' => 'Bisnis'],
-            ['title' => 'SDM'],
-            ['title' => 'IT'],
-            ['title' => 'Legal'],
+            ['title' => 'Security PEMKOT'],
+            ['title' => 'Security GMS'],
+            ['title' => 'Security BPKAD'],
+            ['title' => 'Security PN'],
+            ['title' => 'Security ULP'],
+            ['title' => 'MANAJER'],
+            ['title' => 'DANRU'],
+            ['title' => 'KORLAP'],
+            ['title' => 'ANGGOTA'],
         ];
 
         foreach ($divisions as $division) {

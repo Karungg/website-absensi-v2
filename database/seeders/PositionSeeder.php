@@ -13,13 +13,20 @@ class PositionSeeder extends Seeder
      */
     public function run(): void
     {
+        // $positions = [
+        //     ['title' => 'Direktur Utama'],
+        //     ['title' => 'Direktur'],
+        //     ['title' => 'SDM'],
+        //     ['title' => 'Kepala Bagian'],
+        //     ['title' => 'Pegawai'],
+        //     ['title' => 'Kepala Kas'],
+        // ];
+
         $positions = [
-            ['title' => 'Direktur Utama'],
-            ['title' => 'Direktur'],
-            ['title' => 'SDM'],
-            ['title' => 'Kepala Bagian'],
-            ['title' => 'Pegawai'],
-            ['title' => 'Kepala Kas'],
+            ['title' => 'Admin'],
+            ['title' => 'Kepegawaian'],
+            ['title' => 'Kepala Unit'],
+            ['title' => 'Karyawan'],
         ];
 
         foreach ($positions as $position) {

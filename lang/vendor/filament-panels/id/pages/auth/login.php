@@ -4,7 +4,7 @@ return [
 
     'title' => 'Masuk',
 
-    'heading' => 'SIPAWAI',
+    'heading' => 'Masuk Akun Anda',
 
     'actions' => [
 

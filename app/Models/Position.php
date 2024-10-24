@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Position extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     public $incrementing = false;
     protected $keyType = 'string';

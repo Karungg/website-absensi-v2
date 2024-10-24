@@ -26,14 +26,15 @@ class UserSeeder extends Seeder
         // Create admin user
         User::factory()->admin()->create([
             'name' => 'admin',
-            'email' => 'admin@gmail.com'
+            'email' => 'admin@gmail.com',
+            'position_id' => Position::query()->where('title', 'Admin')->value('id')
         ]);
 
         // Create director user
         User::factory()->director()->create([
-            'name' => 'director',
-            'email' => 'director@gmail.com',
-            'position_id' => Position::query()->where('title', 'Direksi')->value('id')
+            'name' => 'supervisor',
+            'email' => 'supervisor@gmail.com',
+            'position_id' => Position::query()->where('title', 'Kepegawaian')->value('id')
 
         ]);
 
@@ -41,21 +42,21 @@ class UserSeeder extends Seeder
         User::factory()->employee()->create([
             'name' => 'employee',
             'email' => 'employee@gmail.com',
-            'position_id' => Position::query()->where('title', 'Pegawai')->value('id')
+            'position_id' => Position::query()->where('title', 'Karyawan')->value('id')
         ]);
 
         // Create resource user
-        User::factory()->resource()->create([
-            'name' => 'resource',
-            'email' => 'resource@gmail.com',
-            'position_id' => Position::query()->where('title', 'SDM')->value('id')
-        ]);
+        // User::factory()->resource()->create([
+        //     'name' => 'resource',
+        //     'email' => 'resource@gmail.com',
+        //     'position_id' => Position::query()->where('title', 'SDM')->value('id')
+        // ]);
 
         // Create head of division user
         User::factory()->headOfDivision()->create([
             'name' => 'headOfDivision',
             'email' => 'headOfDivision@gmail.com',
-            'position_id' => Position::query()->where('title', 'Kepala Bagian')->value('id')
+            'position_id' => Position::query()->where('title', 'Kepala Unit')->value('id')
         ]);
     }
 }
