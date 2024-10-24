@@ -72,25 +72,16 @@ class ViewApproveRequest extends ViewRecord
             return true;
         }
 
-        // If statement isResource() and check hasRole resource
+        // If statement isDirector()
         if (
-            $user->isResource() && // AND
-            (in_array($status, [
-                StatusRequest::Two,
-                StatusRequest::Four
-            ]) || // OR
-                $this->record->user->hasRole('resource'))
-
-        ) {
-            return true;
-        }
-
-        // If statement isResource() and check hasRole employee
-        if (
-            $user->isResource() && // AND
-            ($this->record->user->hasRole('employee') && // AND
-                $this->record->status == StatusRequest::Zero)
-
+            $user->isDirector() && // AND
+            (in_array(
+                $status,
+                [
+                    StatusRequest::Three,
+                    StatusRequest::Four
+                ]
+            ))
         ) {
             return true;
         }
@@ -98,24 +89,8 @@ class ViewApproveRequest extends ViewRecord
         // If statement isDirector() and check hasRole employee
         if (
             $user->isDirector() && // AND
-            (in_array(
-                $status,
-                [
-                    StatusRequest::One,
-                    StatusRequest::Three,
-                    StatusRequest::Four
-                ]
-            ) || // OR
-                ($this->record->user->hasRole('employee')))
-        ) {
-            return true;
-        }
-
-        // If statement isDirector() and check hasRole headOfDivision
-        if (
-            $user->isDirector() && // AND
             ($this->record->status == StatusRequest::Zero && // AND
-                ($this->record->user->hasRole('headOfDivision')))
+                ($this->record->user->hasRole('employee')))
         ) {
             return true;
         }

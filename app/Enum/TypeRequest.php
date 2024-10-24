@@ -9,6 +9,7 @@ use Filament\Support\Contracts\HasLabel;
 enum TypeRequest: string implements HasLabel, HasColor, HasIcon
 {
     case Leave = 'leave';
+    case GiveBirth = 'givebirth';
     case Permission = 'permission';
     case Sick = 'sick';
 
@@ -16,8 +17,9 @@ enum TypeRequest: string implements HasLabel, HasColor, HasIcon
     {
         return match ($this) {
             self::Leave => 'Cuti',
+            self::GiveBirth => 'Cuti Melahirkan',
             self::Permission => 'Izin',
-            self::Sick => 'Sakit',
+            self::Sick => 'Sakit'
         };
     }
 
@@ -25,6 +27,7 @@ enum TypeRequest: string implements HasLabel, HasColor, HasIcon
     {
         return match ($this) {
             self::Leave => 'primary',
+            self::GiveBirth => 'success',
             self::Permission => 'info',
             self::Sick => 'danger'
         };
@@ -34,6 +37,7 @@ enum TypeRequest: string implements HasLabel, HasColor, HasIcon
     {
         return match ($this) {
             self::Leave => 'heroicon-m-arrow-right-start-on-rectangle',
+            self::GiveBirth => 'heroicon-m-building-office',
             self::Permission => 'heroicon-m-hand-raised',
             self::Sick => 'heroicon-m-user-minus'
         };
