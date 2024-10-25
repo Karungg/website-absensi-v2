@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Enum\StatusRequest;
 use App\Models\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -24,25 +23,19 @@ class RequestObserver
      */
     public function updated(Request $request): void
     {
-        $user = User::query()
-            ->findOrFail($request->user_id, ['id']);
-
         if ($request->status == StatusRequest::Zero) {
             $this->logStatus($request->id, 'Melakukan Perubahan Data Pengajuan');
         } else {
             $status = match ($request->status) {
-                StatusRequest::One => 'Disetujui Kepala Divisi',
-                StatusRequest::Two => 'Disetujui SDM',
+                StatusRequest::One => 'Disetujui Kepala Unit',
                 StatusRequest::Three => 'Disetujui Direktur Utama',
                 StatusRequest::Four => 'Ditolak',
             };
 
             $this->logStatus($request->id, $status);
 
-            if ($status === 'Disetujui Kepala Divisi') {
-                $this->logStatus($request->id, 'Menunggu Disetujui SDM', 1);
-            } elseif ($status === 'Disetujui SDM' && $user->isHeadOfDivision()) {
-                $this->logStatus($request->id, 'Menunggu Disetujui Direktur Utama', 1);
+            if ($status === 'Disetujui Kepala Unit') {
+                $this->logStatus($request->id, 'Menunggu Disetujui Manajer', 1);
             }
         }
     }
@@ -70,9 +63,9 @@ class RequestObserver
         $user = auth()->user();
 
         return match (true) {
-            $user->isEmployee() => 'Menunggu Disetujui Kepala Divisi',
-            $user->isHeadOfDivision() => 'Menunggu Disetujui SDM',
-            $user->isResource() => 'Menunggu Disetujui Direktur Utama',
+            $user->isEmployee() => 'Menunggu Disetujui Kepala Unit',
+            $user->isHeadOfDivision() => 'Menunggu Disetujui Manajer',
+            $user->isResource() => 'Menunggu Disetujui Manajer',
         };
     }
 }
