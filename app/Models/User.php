@@ -116,6 +116,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasRole('headOfDivision');
     }
 
+    public function isJuniorChief(): bool
+    {
+        return $this->hasRole('juniorChief');
+    }
+
+    public function isEmployeeJuniorChief(): bool
+    {
+        return $this->hasAnyRole(['employee', 'juniorChief']);
+    }
+
     public function isAdminDirector(): bool
     {
         return $this->hasAnyRole(['admin', 'director']);

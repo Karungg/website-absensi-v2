@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
         Role::create(['name' => 'employee']); // Employee role
         Role::create(['name' => 'resource']); // Resource role
         Role::create(['name' => 'headOfDivision']); // headOfDivision role
+        Role::create(['name' => 'juniorChief']); // Junior Chief role
 
         // Create admin user
         User::factory()->admin()->create([
@@ -57,6 +58,13 @@ class UserSeeder extends Seeder
             'name' => 'Kepala Unit',
             'email' => 'kepalaunit@gmail.com',
             'position_id' => Position::query()->where('title', 'Kepala Unit')->value('id')
+        ]);
+
+        // Create junior chief user
+        User::factory()->juniorChief()->create([
+            'name' => 'kepala muda',
+            'email' => 'kepalamuda@gmail.com',
+            'position_id' => Position::query()->where('title', 'Kepala Muda')->value('id')
         ]);
     }
 }

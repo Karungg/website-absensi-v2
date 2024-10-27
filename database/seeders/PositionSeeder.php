@@ -27,6 +27,7 @@ class PositionSeeder extends Seeder
             ['title' => 'Kepegawaian'],
             ['title' => 'Kepala Unit'],
             ['title' => 'Karyawan'],
+            ['title' => 'Kepala Muda'],
         ];
 
         foreach ($positions as $position) {

@@ -278,6 +278,6 @@ class ApproveRequestResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return !auth()->user()->isEmployee();
+        return !auth()->user()->isEmployeeJuniorChief();
     }
 }

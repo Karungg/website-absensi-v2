@@ -65,6 +65,7 @@ class RequestObserver
         return match (true) {
             $user->isEmployee() => 'Menunggu Disetujui Kepala Unit',
             $user->isHeadOfDivision() => 'Menunggu Disetujui Kepala Balai',
+            $user->isJuniorChief() => 'Menunggu Disetujui Kepala Balai',
             // $user->isResource() => 'Menunggu Disetujui Manajer',
         };
     }

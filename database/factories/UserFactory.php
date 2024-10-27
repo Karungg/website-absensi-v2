@@ -98,4 +98,13 @@ class UserFactory extends Factory
             $user->assignRole('headOfDivision');
         });
     }
+
+    public function juniorChief(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [];
+        })->afterCreating(function (User $user) {
+            $user->assignRole('juniorChief');
+        });
+    }
 }
