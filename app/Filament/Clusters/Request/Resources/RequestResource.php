@@ -22,6 +22,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class RequestResource extends Resource
 {
@@ -44,22 +45,37 @@ class RequestResource extends Resource
                     ->options(TypeRequest::class)
                     ->inline()
                     ->required()
-                    ->hint(function () {
-                        $leaveAllowance = User::query()
-                            ->where('id', auth()->id())
-                            ->value('leave_allowance');
+                    ->live()
+                    ->hint(function ($state) {
+                        $allowances = [
+                            'leave' => 'leave_allowance',
+                            'sick' => 'sick_allowance',
+                            'giveBirth' => 'give_birth_allowance',
+                        ];
 
-                        return "Cuti anda tersisa $leaveAllowance";
+                        if (isset($allowances[$state])) {
+                            $allowance = DB::table('users')
+                                ->where('id', auth()->id())
+                                ->value($allowances[$state]);
+
+                            return "Cuti anda tersisa $allowance";
+                        }
                     })
                     ->rules([
                         fn(): Closure => function (string $attribute, $value, Closure $fail) {
-                            if ($value == 'leave') {
-                                $leaveAllowance = User::query()
-                                    ->where('id', auth()->id())
-                                    ->value('leave_allowance');
+                            $allowances = [
+                                'leave' => 'leave_allowance',
+                                'sick' => 'sick_allowance',
+                                'giveBirth' => 'give_birth_allowance'
+                            ];
 
-                                if ($leaveAllowance <= 0) {
-                                    $fail('Jatah cuti anda sudah habis.');
+                            if (isset($allowances[$value])) {
+                                $allowance = DB::table('users')
+                                    ->where('id', auth()->id())
+                                    ->value($allowances[$value]);
+
+                                if ($allowance <= 0) {
+                                    $fail('Sisa cuti anda sudah habis');
                                 }
                             }
                         }
@@ -73,9 +89,9 @@ class RequestResource extends Resource
                     ->options(function (?Model $record) {
                         return match ($record->status) {
                             StatusRequest::Zero => ['Pending'],
-                            StatusRequest::One => ['Disetujui Kepala Divisi'],
+                            StatusRequest::One => ['Disetujui Kepala Unit'],
                             StatusRequest::Two => ['Disetujui SDM'],
-                            StatusRequest::Three => ['Disetujui Direktur'],
+                            StatusRequest::Three => ['Disetujui Kepala Balai'],
                             StatusRequest::Four => ['Ditolak'],
                         };
                     })
@@ -88,18 +104,24 @@ class RequestResource extends Resource
                     ->required()
                     ->afterOrEqual(fn(Get $get) => $get('start_date'))
                     ->rules(fn(Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
-                        if ($get('type') == 'leave') {
+                        // Get different days
+                        $startDate = Carbon::parse($get('start_date'));
+                        $endDate = Carbon::parse($value);
+                        $differentDays = $startDate->diffInDays($endDate);
 
-                            $startDate = Carbon::parse($get('start_date'));
-                            $endDate = Carbon::parse($value);
-                            $leaveAllowance = User::query()
+                        $allowances = [
+                            'leave' => 'leave_allowance',
+                            'sick' => 'sick_allowance',
+                            'giveBirth' => 'give_birth_allowance'
+                        ];
+
+                        if (isset($allowances[$get('type')])) {
+                            $allowance = User::query()
                                 ->where('id', auth()->id())
-                                ->value('leave_allowance');
+                                ->value($allowances[$get('type')]);
 
-                            $differentDays = $startDate->diffInDays($endDate);
-
-                            if ($differentDays >= $leaveAllowance) {
-                                $fail("Batas cuti anda adalah $leaveAllowance hari");
+                            if ($differentDays >= $allowance) {
+                                $fail("Batas cuti anda adalah $allowance hari");
                             }
                         }
                     })

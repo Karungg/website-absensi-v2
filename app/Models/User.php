@@ -37,6 +37,8 @@ class User extends Authenticatable implements FilamentUser
         'phone',
         'address',
         'leave_allowance',
+        'sick_allowance',
+        'give_birth_allowance',
         'date_of_entry',
         'mutation_date',
         'lod_start',

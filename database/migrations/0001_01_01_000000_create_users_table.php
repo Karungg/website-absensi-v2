@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('phone', 17);
             $table->string('address', 256);
             $table->smallInteger('leave_allowance')->default(0);
+            $table->smallInteger('sick_allowance')->default(0);
+            $table->smallInteger('give_birth_allowance')->default(0);
             $table->date('date_of_entry')->nullable();
             $table->date('mutation_date')->nullable();
             $table->string('lod_start', 256)->nullable();
