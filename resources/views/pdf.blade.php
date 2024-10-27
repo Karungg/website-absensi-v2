@@ -120,12 +120,12 @@
         <div style="height: 60px;"></div>
     </div>
 
-    @if (!$request->user->roles('employee'))
+    {{-- @if (!$request->user->roles('employee'))
         <div class="end">
             <p>Mengetahui</p>
             <p>( Gatot Sumargono )</p>
         </div>
-    @endif
+    @endif --}}
 
     <div class="line"></div>
 
@@ -134,13 +134,19 @@
         <div style="height: 60px;"></div>
     </div>
 
-    @hasanyrole(['employee', 'headOfDivision'])
+    <div class="end">
+        <img src="data:image/png;base64, {{ base64_encode(QrCode::size(100)->generate(route('annountcement', $request->id))) }}"
+            alt="QR Code">
+        <p>( Kepala Balai )</p>
+    </div>
+
+    {{-- @hasanyrole(['employee', 'headOfDivision'])
         <div class="end">
             <img src="data:image/png;base64, {{ base64_encode(QrCode::size(100)->generate(route('annountcement', $request->id))) }}"
                 alt="QR Code">
             <p>( SDM )</p>
         </div>
-    @endhasanyrole
+    @endhasanyrole --}}
 </body>
 
 </html>

@@ -32,16 +32,16 @@ class UserSeeder extends Seeder
 
         // Create director user
         User::factory()->director()->create([
-            'name' => 'supervisor',
-            'email' => 'supervisor@gmail.com',
+            'name' => 'kepala balai',
+            'email' => 'kepalabalai@gmail.com',
             'position_id' => Position::query()->where('title', 'Kepegawaian')->value('id')
 
         ]);
 
         // Create employee user
         User::factory()->employee()->create([
-            'name' => 'employee',
-            'email' => 'employee@gmail.com',
+            'name' => 'pegawai',
+            'email' => 'pegawai@gmail.com',
             'position_id' => Position::query()->where('title', 'Karyawan')->value('id')
         ]);
 
@@ -54,8 +54,8 @@ class UserSeeder extends Seeder
 
         // Create head of division user
         User::factory()->headOfDivision()->create([
-            'name' => 'headOfDivision',
-            'email' => 'headOfDivision@gmail.com',
+            'name' => 'Kepala Unit',
+            'email' => 'kepalaunit@gmail.com',
             'position_id' => Position::query()->where('title', 'Kepala Unit')->value('id')
         ]);
     }

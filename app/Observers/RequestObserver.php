@@ -28,14 +28,14 @@ class RequestObserver
         } else {
             $status = match ($request->status) {
                 StatusRequest::One => 'Disetujui Kepala Unit',
-                StatusRequest::Three => 'Disetujui Direktur Utama',
+                StatusRequest::Three => 'Disetujui Kepala Balai',
                 StatusRequest::Four => 'Ditolak',
             };
 
             $this->logStatus($request->id, $status);
 
             if ($status === 'Disetujui Kepala Unit') {
-                $this->logStatus($request->id, 'Menunggu Disetujui Manajer', 1);
+                $this->logStatus($request->id, 'Menunggu Disetujui Kepala Balai', 1);
             }
         }
     }
@@ -64,8 +64,8 @@ class RequestObserver
 
         return match (true) {
             $user->isEmployee() => 'Menunggu Disetujui Kepala Unit',
-            $user->isHeadOfDivision() => 'Menunggu Disetujui Manajer',
-            $user->isResource() => 'Menunggu Disetujui Manajer',
+            $user->isHeadOfDivision() => 'Menunggu Disetujui Kepala Balai',
+            // $user->isResource() => 'Menunggu Disetujui Manajer',
         };
     }
 }

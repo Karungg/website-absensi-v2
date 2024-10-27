@@ -21,6 +21,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ApproveRequestResource extends Resource
 {
@@ -47,21 +48,35 @@ class ApproveRequestResource extends Resource
                     ->options(TypeRequest::class)
                     ->inline()
                     ->required()
+                    ->live()
                     ->validationMessages([
                         'required' => 'Kategori Ajuan harus diisi.'
                     ])
-                    ->hint(function (?Model $record): string {
-                        $leave =  $record->user->leave_allowance;
-                        return "Sisa Cuti : $leave";
+                    ->hint(function (?Model $record, $state): string {
+                        $allowances = [
+                            'leave' => 'leave_allowance',
+                            'sick' => 'sick_allowance',
+                            'giveBirth' => 'give_birth_allowance',
+                        ];
+
+                        if (isset($allowances[$state])) {
+                            $allowance = DB::table('users')
+                                ->where('id', $record->user->id)
+                                ->value($allowances[$state]);
+
+                            return "Sisa Cuti : $allowance";
+                        }
+
+                        return "";
                     }),
                 Forms\Components\ToggleButtons::make('status')
                     ->inline()
                     ->options(function (?Model $record) {
                         return match ($record->status) {
                             StatusRequest::Zero => ['Pending'],
-                            StatusRequest::One => ['Disetujui Kepala Divisi'],
-                            StatusRequest::Two => ['Disetujui SDM'],
-                            StatusRequest::Three => ['Disetujui Direktur'],
+                            StatusRequest::One => ['Disetujui Kepala Unit'],
+                            // StatusRequest::Two => ['Disetujui SDM'],
+                            StatusRequest::Three => ['Disetujui Kepala Balai'],
                             StatusRequest::Four => ['Ditolak'],
                         };
                     })

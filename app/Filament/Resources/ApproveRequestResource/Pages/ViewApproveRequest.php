@@ -66,6 +66,7 @@ class ViewApproveRequest extends ViewRecord
             in_array($status, [
                 StatusRequest::One,
                 StatusRequest::Two,
+                StatusRequest::Three,
                 StatusRequest::Four
             ])
         ) {
@@ -109,7 +110,7 @@ class ViewApproveRequest extends ViewRecord
 
         $status =  match (true) {
             $user->isHeadOfDivision() => StatusRequest::One,
-            $user->isResource() => StatusRequest::Two,
+            // $user->isResource() => StatusRequest::Two,
             $user->isDirector() => StatusRequest::Three
         };
 
@@ -120,6 +121,8 @@ class ViewApproveRequest extends ViewRecord
         $startDate = Carbon::parse($this->record->start_date)->addDay(-1);
         $endDate = Carbon::parse($this->record->end_date);
         $differentDays = $startDate->diffInDays($endDate);
+
+        // TYPE REQUEST LEAVE
 
         // Decrement leave allowance logic for headOfDivision, resource
         if (
@@ -141,6 +144,58 @@ class ViewApproveRequest extends ViewRecord
                 ->where('id', $this->record->user_id)
                 ->decrement('leave_allowance', $differentDays);
         }
+
+        // END TYPE REQUEST LEAVE
+
+        // TYPE REQUEST SICK
+
+        // Decrement sick allowance logic for headOfDivision, resource
+        if (
+            $this->record->status == StatusRequest::Three && // AND
+            $this->record->type == TypeRequest::Sick
+        ) {
+            DB::table('users')
+                ->where('id', $this->record->user_id)
+                ->decrement('sick_allowance', $differentDays);
+        }
+
+        // Decrement sick allowance logic for employee
+        if (
+            $this->record->status == StatusRequest::Two && // AND
+            $this->record->type == TypeRequest::Sick && // AND
+            $this->record->user->hasRole('employee')
+        ) {
+            DB::table('users')
+                ->where('id', $this->record->user_id)
+                ->decrement('sick_allowance', $differentDays);
+        }
+
+        // END TYPE REQUEST SICK
+
+        // TYPE REQUEST GIVE BIRTH
+
+        // Decrement leave allowance logic for headOfDivision, resource
+        if (
+            $this->record->status == StatusRequest::Three && // AND
+            $this->record->type == TypeRequest::GiveBirth
+        ) {
+            DB::table('users')
+                ->where('id', $this->record->user_id)
+                ->decrement('give_birth_allowance', $differentDays);
+        }
+
+        // Decrement leave allowance logic for employee
+        if (
+            $this->record->status == StatusRequest::Two && // AND
+            $this->record->type == TypeRequest::GiveBirth && // AND
+            $this->record->user->hasRole('employee')
+        ) {
+            DB::table('users')
+                ->where('id', $this->record->user_id)
+                ->decrement('give_birth_allowance', $differentDays);
+        }
+
+        // END TYPE REQUEST GIVE BIRTH
 
         // Insert request details/log
         DB::table('request_details')

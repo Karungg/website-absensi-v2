@@ -18,9 +18,9 @@ enum StatusRequest: string implements HasLabel, HasColor, HasIcon
     {
         return match ($this) {
             self::Zero => 'Pending',
-            self::One => 'Disetujui Kepala Divisi',
+            self::One => 'Disetujui Kepala Unit',
             self::Two => 'Disetujui SDM',
-            self::Three => 'Disetujui Direktur',
+            self::Three => 'Disetujui Kepala Balai',
             self::Four => 'Ditolak'
         };
     }
