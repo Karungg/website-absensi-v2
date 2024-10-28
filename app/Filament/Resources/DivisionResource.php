@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\DivisionExporter;
 use App\Filament\Resources\DivisionResource\Pages;
 use App\Models\Division;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Table;
 
 class DivisionResource extends Resource
@@ -75,6 +77,8 @@ class DivisionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()
+                    ->exporter(DivisionExporter::class)
             ]);
     }
 

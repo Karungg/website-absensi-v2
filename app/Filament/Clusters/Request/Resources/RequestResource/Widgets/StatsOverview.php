@@ -14,9 +14,15 @@ class StatsOverview extends BaseWidget
 
         $leaveAllowance = DB::table('users')
             ->where('id', $user)
-            ->selectRaw('leave_allowance + sick_allowance + give_birth_allowance as total_allowance')
-            ->value('total_allowance');
+            ->value('leave_allowance');
 
+        $sickAllowance = DB::table('users')
+            ->where('id', auth()->id())
+            ->value('sick_allowance');
+
+        $giveBirthAllowance = DB::table('users')
+            ->where('id', auth()->id())
+            ->value('give_birth_allowance');
 
         $totalRequest = DB::table('requests')
             ->where('user_id', $user)
@@ -33,7 +39,9 @@ class StatsOverview extends BaseWidget
             ->count();
 
         return [
-            Stat::make('Total Sisa Cuti', $leaveAllowance),
+            Stat::make('Sisa Cuti Tahunan', $leaveAllowance),
+            Stat::make('Sisa Cuti Sakit', $sickAllowance),
+            Stat::make('Sisa Cuti Melahirkan', $giveBirthAllowance),
             Stat::make('Jumlah Pengajuan', $totalRequest),
             Stat::make('Dalam Proses', $inProcess),
             Stat::make('Ditolak', $rejected),

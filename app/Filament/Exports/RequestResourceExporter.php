@@ -10,7 +10,7 @@ use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
 
-class RequestExporter extends Exporter
+class RequestResourceExporter extends Exporter
 {
     protected static ?string $model = Request::class;
 
@@ -20,14 +20,17 @@ class RequestExporter extends Exporter
             ExportColumn::make('id')
                 ->label('ID'),
             ExportColumn::make('user.name')
-                ->label('Nama Pengaju'),
+                ->label('Nama'),
             ExportColumn::make('type')
                 ->label('Kategori Ajuan')
                 ->formatStateUsing(function (TypeRequest $state): string {
                     return match ($state) {
-                        TypeRequest::Leave => 'Cuti',
-                        TypeRequest::Permission => 'Izin',
-                        TypeRequest::Sick => 'Sakit'
+                        TypeRequest::Leave => 'Cuti Tahunan',
+                        TypeRequest::BigHoliday => 'Cuti Besar',
+                        TypeRequest::Sick => 'Cuti Sakit',
+                        TypeRequest::ImportantLeave => 'Cuti Penting',
+                        TypeRequest::GiveBirth => 'Cuti Melahirkan',
+                        TypeRequest::LeaveOutside => 'Cuti Diluar Tanggungan Negara'
                     };
                 }),
             ExportColumn::make('start_date')
@@ -48,9 +51,8 @@ class RequestExporter extends Exporter
                 ->formatStateUsing(function (StatusRequest $state): string {
                     return match ($state) {
                         StatusRequest::Zero => 'Pending',
-                        StatusRequest::One => 'Disetujui Kepala Divisi',
-                        StatusRequest::Two => 'Disetujui SDM',
-                        StatusRequest::Three => 'Disetujui Direktur',
+                        StatusRequest::One => 'Disetujui Kepala Unit',
+                        StatusRequest::Three => 'Disetujui Kepala Balai',
                         StatusRequest::Four => 'Ditolak'
                     };
                 }),
@@ -63,7 +65,7 @@ class RequestExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your request export has completed and ' . number_format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+        $body = 'Your request resource export has completed and ' . number_format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
             $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';

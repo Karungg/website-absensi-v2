@@ -253,9 +253,6 @@ class ApproveRequestResource extends Resource
                     ->label('Detail'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
                 ExportBulkAction::make()
                     ->exporter(RequestExporter::class)
             ]);

@@ -7,6 +7,7 @@ use App\Filament\Clusters\Request;
 use App\Filament\Clusters\Request\Resources\RequestResource\Pages;
 use App\Models\Request as ModelRequest;
 use App\Enum\TypeRequest;
+use App\Filament\Exports\RequestResourceExporter;
 use App\Models\User;
 use Carbon\Carbon;
 use Closure;
@@ -18,6 +19,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -90,7 +92,7 @@ class RequestResource extends Resource
                         return match ($record->status) {
                             StatusRequest::Zero => ['Pending'],
                             StatusRequest::One => ['Disetujui Kepala Unit'],
-                            StatusRequest::Two => ['Disetujui SDM'],
+                            // StatusRequest::Two => ['Disetujui SDM'],
                             StatusRequest::Three => ['Disetujui Kepala Balai'],
                             StatusRequest::Four => ['Ditolak'],
                         };
@@ -231,10 +233,9 @@ class RequestResource extends Resource
             ->filters([
                 Filter::make('created_at')
                     ->form([
-                        ToggleButtons::make('type')
+                        Select::make('type')
                             ->label('Kategori Ajuan')
-                            ->options(TypeRequest::class)
-                            ->inline(),
+                            ->options(TypeRequest::class),
                         Select::make('status')
                             ->label('Status')
                             ->options(StatusRequest::class),
@@ -268,6 +269,10 @@ class RequestResource extends Resource
                 Tables\Actions\ViewAction::make()
                     ->label('Detail'),
                 Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                ExportBulkAction::make()
+                    ->exporter(RequestResourceExporter::class)
             ]);
     }
 
