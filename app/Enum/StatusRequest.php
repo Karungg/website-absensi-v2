@@ -10,7 +10,7 @@ enum StatusRequest: string implements HasLabel, HasColor, HasIcon
 {
     case Zero = 'zero';
     case One = 'one';
-        // case Two = 'two';
+    case Two = 'two';
     case Three = 'three';
     case Four = 'four';
 
@@ -19,7 +19,7 @@ enum StatusRequest: string implements HasLabel, HasColor, HasIcon
         return match ($this) {
             self::Zero => 'Pending',
             self::One => 'Disetujui Kepala Unit',
-            // self::Two => 'Disetujui SDM',
+            self::Two => 'Disetujui SDM',
             self::Three => 'Disetujui Kepala Balai',
             self::Four => 'Ditolak'
         };
@@ -30,7 +30,7 @@ enum StatusRequest: string implements HasLabel, HasColor, HasIcon
         return match ($this) {
             self::Zero => 'gray',
             self::One => 'warning',
-            // self::Two => 'info',
+            self::Two => 'info',
             self::Three => 'success',
             self::Four => 'danger'
         };
@@ -41,7 +41,7 @@ enum StatusRequest: string implements HasLabel, HasColor, HasIcon
         return match ($this) {
             self::Zero => 'heroicon-m-arrow-path',
             self::One => 'heroicon-m-hand-thumb-up',
-            // self::Two => 'heroicon-m-hand-thumb-up',
+            self::Two => 'heroicon-m-hand-thumb-up',
             self::Three => 'heroicon-m-hand-thumb-up',
             self::Four => 'heroicon-m-x-mark',
         };
