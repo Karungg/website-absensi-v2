@@ -13,13 +13,14 @@ class PdfController extends Controller
     {
         $request = ModelsRequest::query()
             ->with([
-                'user:id,nip,name,date_of_entry,leave_allowance,position_id',
+                'user:id,nip,name,date_of_entry,phone,leave_allowance,sick_allowance,give_birth_allowance,position_id',
                 'user.position:id,title'
             ])
             ->where('id', $id)
             ->firstOrFail([
                 'id',
                 'type',
+                'description',
                 'start_date',
                 'end_date',
                 'location',
